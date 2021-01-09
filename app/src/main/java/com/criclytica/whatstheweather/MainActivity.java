@@ -20,6 +20,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import java.util.*;
+import java.text.*;
+
 public class MainActivity extends AppCompatActivity {
 
     EditText editText;
@@ -86,18 +89,20 @@ public class MainActivity extends AppCompatActivity {
             super.onPostExecute(s);
             try {
                 JSONObject jsonObject = new JSONObject(s);
-                String cityInfo = jsonObject.getString("name");
+
                 String mainInfo = jsonObject.getString("main");
-                String coordinates = jsonObject.getString("coord");
                 String weatherInfo = jsonObject.getString("weather");
 
+                JSONArray weatherArray = new JSONArray(weatherInfo);
+                JSONArray mainArray = new JSONArray(mainInfo);
 
-                JSONArray jsonArray = new JSONArray(weatherInfo);
                 String message = "";
 
-                for(int i=0; i<jsonArray.length(); i++) {
-                    JSONObject object = jsonArray.getJSONObject(i);
-                    message += object.getString("main") + ": " + object.getString("description");
+
+
+                for(int i=0; i<weatherArray.length(); i++) {
+                    JSONObject object = weatherArray.getJSONObject(i);
+                    message += object.getString("main") + " (" + object.getString("description") + ")\n";
                     resultTextView.setText(message);
                 }
 
